@@ -1,6 +1,7 @@
 package com.jt.etcd.inspring;
 
 import com.jt.etcd.component.EtcdConfigService;
+import com.jt.etcd.listener.UpdateObjectListener;
 import com.jt.etcd.listener.UpdatePSListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.SmartLifecycle;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MutablePropertySources;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.Properties;
 
 /**
  * @author 帅气的景天老师
@@ -43,10 +49,22 @@ public class EtcdRefreshObjectInSpring implements SmartLifecycle, ApplicationCon
 
     @Override
     public void start() {
-        etcdConfigService.addAllListener(new UpdatePSListener() {
+        ConfigurableEnvironment environment = (ConfigurableEnvironment) applicationContext.getEnvironment();
+        //默认使用spring.application.name作为dataId去etcd上拿数据
+        String dataId = (String) environment.getProperty("spring.application.name");
+
+        if (StringUtils.isEmpty(dataId)) {
+            String dir = environment.getProperty("user.dir");
+            String[] dirArr = dir.split("\\\\");
+            dataId = dirArr[dirArr.length-1];
+        }
+
+        String finalDataId = dataId;
+        etcdConfigService.addListener(finalDataId,new UpdateObjectListener() {
             @Override
             public void receiveConfigInfo(String configInfo) {
                 scope.refreshAll();
+                LOG.info("Refresh Bean,dataId={}", finalDataId);
             }
         });
     }

@@ -1,6 +1,6 @@
 package com.jt.etcd.component;
 
-import com.jt.etcd.listener.AbstractNotifyUserListener;
+//import com.jt.etcd.listener.AbstractNotifyUserListener;
 import com.jt.etcd.listener.Listener;
 import com.jt.etcd.listener.UpdatePSListener;
 import com.jt.etcd.listener.UpdateObjectListener;
@@ -135,10 +135,10 @@ public class EtcdConfigServiceImpl implements EtcdConfigService, ApplicationCont
             //2、完成对象刷新
             List<Listener> updatePSListener = getUpdatePSListener(listenerList);
             List<Listener> updateObjectListener = getUpdateObjectListener(listenerList);
-            List<Listener> notifyUserListener = getNotifyUserListener(listenerList);
+//            List<Listener> notifyUserListener = getNotifyUserListener(listenerList);
             invoke(updatePSListener, configInfo);
             invoke(updateObjectListener, configInfo);
-            invoke(notifyUserListener, configInfo);
+//            invoke(notifyUserListener, configInfo);
         } catch (Exception e) {
             LOG.error("", e);
         }
@@ -162,15 +162,15 @@ public class EtcdConfigServiceImpl implements EtcdConfigService, ApplicationCont
         return list;
     }
 
-    private List<Listener> getNotifyUserListener(List<Listener> listenerList) {
-        List<Listener> list = new ArrayList<>();
-        for (Listener listener : listenerList) {
-            if (listener instanceof AbstractNotifyUserListener) {
-                list.add(listener);
-            }
-        }
-        return list;
-    }
+//    private List<Listener> getNotifyUserListener(List<Listener> listenerList) {
+//        List<Listener> list = new ArrayList<>();
+//        for (Listener listener : listenerList) {
+//            if (listener instanceof AbstractNotifyUserListener) {
+//                list.add(listener);
+//            }
+//        }
+//        return list;
+//    }
 
     private List<Listener> getUpdateObjectListener(List<Listener> listenerList) {
         List<Listener> list = new ArrayList<>();

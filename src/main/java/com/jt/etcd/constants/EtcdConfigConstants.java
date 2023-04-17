@@ -8,6 +8,6 @@ public class EtcdConfigConstants {
 
     public static final String CONFIG_PROPERTIES_PREFIX = "etcd.config";
 
-    public static final String CONFIG_PROPERTIES_ENABLED = "etcd.config.enabled";
+//    public static final String CONFIG_PROPERTIES_ENABLED = "etcd.config.enabled";
 
 }

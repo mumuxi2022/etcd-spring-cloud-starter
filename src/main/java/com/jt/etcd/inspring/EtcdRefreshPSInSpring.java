@@ -5,7 +5,6 @@ import com.jt.etcd.listener.UpdatePSListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.env.OriginTrackedMapPropertySource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -13,7 +12,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
@@ -47,7 +45,6 @@ public class EtcdRefreshPSInSpring implements SmartLifecycle, ApplicationContext
     @Override
     public void start() {
         ConfigurableEnvironment environment = (ConfigurableEnvironment) applicationContext.getEnvironment();
-        MutablePropertySources destination = environment.getPropertySources();
         Properties properties = new Properties();
         //默认使用spring.application.name作为dataId去etcd上拿数据
         String dataId = (String) environment.getProperty("spring.application.name");
@@ -73,7 +70,7 @@ public class EtcdRefreshPSInSpring implements SmartLifecycle, ApplicationContext
                     OriginTrackedMapPropertySource source = new OriginTrackedMapPropertySource(finalDataId,ch);
                     //替换配置内容
                     propertySources.replace(finalDataId, source);
-                    LOG.info("updateCacheListener replace etcd config,dataId={}", finalDataId);
+                    LOG.info("Refresh PS,dataId={}", finalDataId);
                 }catch (Exception e){
                     LOG.error(e.getMessage());
                 }
